@@ -51,3 +51,15 @@ insert into owns values("A02","KA031181");
 insert into owns values("A03","KA095477");
 insert into owns values("A04","KA053408");
 insert into owns values("A05","KA041702");
+
+insert into participated values("A01","KA052250",11,10000);
+insert into participated values("A02","KA053408",12,50000);
+insert into participated values("A03","KA095477",13,10000);
+insert into participated values("A04","KA031181",14,10000);
+insert into participated values("A05","KA041702",15,10000);
+
+insert into accident values(11, '01-jan-03',"Mysore road");
+insert into accident values(12, '02-feb-04',"South end circle");
+insert into accident values(13, '21-jan-03',"Bull temple road");
+insert into accident values(14, '17-feb-08',"Mysore road");
+insert into accident values(15, '04-mar-05',"Kanakpura road");
