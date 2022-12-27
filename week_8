@@ -1,0 +1,97 @@
+create database airlines;
+use airlines;
+
+create table flights(
+flno int primary key,
+_from varchar(30),
+_to varchar(30),
+distance int,
+departarture time,
+arrival time,
+price int
+);
+
+insert into flights values (1,'Bengalure','New Delhi',500,'6:00','9:00',5000);
+insert into flights values (2,'Bengalure','Chennai',300,'7:00','8:30',3000);
+insert into flights values (3,'Trivandrum','New Delhi',800,'8:00','11:30',6000);
+insert into flights values (4,'Bengalure','Frankfurt',10000,'6:00','23:30',50000);
+insert into flights values (5,'Kolkata','New Delhi',2400,'11:00','3:30',9000);
+insert into flights values (6,'Bengalure','Frankfurt',8000,'9:00','23:00',40000);
+
+create table aircraft(
+a_id int primary key,
+a_name varchar(30),
+crusing_range int
+);
+
+insert into aircraft values (1,'Airbus',2000);
+insert into aircraft values (2,'Boeing',700);
+insert into aircraft values (3,'Jetairways',550);
+insert into aircraft values (4,'Indigo',5000);
+insert into aircraft values (5,'Boeing',4500);
+insert into aircraft values (6,'Airbus',2200);
+
+create table employees(
+e_id int primary key,
+e_name varchar(30),
+salary int
+);
+
+insert into employees values (101,'Avinash',50000);
+insert into employees values (102,'Lokesh',60000);
+insert into employees values (103,'Rakesh',70000);
+insert into employees values (104,'Santhosh',82000);
+insert into employees values (105,'Tilak',5000);
+
+create table certified(
+a_id int,
+e_id int,
+foreign key (a_id) references aircraft(a_id) on update cascade on delete cascade,
+foreign key (e_id) references employees(e_id) on update cascade on delete cascade
+);
+
+insert into certified(e_id,a_id) values (101,2);
+insert into certified(e_id,a_id) values (101,4);
+insert into certified(e_id,a_id) values (101,5);
+insert into certified(e_id,a_id) values (101,6);
+insert into certified(e_id,a_id) values (102,1);
+insert into certified(e_id,a_id) values (102,3);
+insert into certified(e_id,a_id) values (102,5);
+insert into certified(e_id,a_id) values (103,2);
+insert into certified(e_id,a_id) values (103,3);
+insert into certified(e_id,a_id) values (103,5);
+insert into certified(e_id,a_id) values (103,6);
+insert into certified(e_id,a_id) values (104,6);
+insert into certified(e_id,a_id) values (104,1);
+insert into certified(e_id,a_id) values (104,3);
+insert into certified(e_id,a_id) values (105,3);
+
+
+
+
+select a_name from aircraft where a_id in 
+(select a_id from certified where e_id in(
+select e_id from employees where salary > 80000));
+
+select e.e_id, max(crusing_range) from employees e inner join 
+certified c on e.e_id = c.e_id inner join 
+aircraft a on c.a_id = a.a_id 
+group by e_id having count(c.e_id) >= 3;
+
+
+select e_name from employees where salary <
+(select min(price) from flights where _from = "Bengalure" and _to = "Frankfurt");
+
+select a_name, avg(salary) from aircraft a inner join
+certified c on a.a_id = c.a_id inner join
+employees e on e.e_id = c.e_id 
+where crusing_range > 1000 group by a.a_id;
+
+select e_name from employees where e_id in
+(select e_id from certified where a_id in(
+select a_id from aircraft where a_name = "Boeing"));
+
+select a_id from aircraft where crusing_range >=(
+select distance from flights where 
+_from = "Bengalure" and _to = "New Delhi");
+
